@@ -1,0 +1,24 @@
+class Solution{
+public:
+    long long minimumCost(string s,string t,vector<char>& o,vector<char>& c,vector<int>& cost){
+        const long long INF=1e18;
+        vector<vector<long long>> d(26,vector<long long>(26,INF));
+        for(int i=0;i<26;i++) d[i][i]=0;
+        for(int i=0;i<o.size();i++){
+            int u=o[i]-'a',v=c[i]-'a';
+            d[u][v]=min(d[u][v],(long long)cost[i]);
+        }
+        for(int k=0;k<26;k++)
+            for(int i=0;i<26;i++)
+                for(int j=0;j<26;j++)
+                    if(d[i][k]+d[k][j]<d[i][j])
+                        d[i][j]=d[i][k]+d[k][j];
+        long long ans=0;
+        for(int i=0;i<s.size();i++){
+            int u=s[i]-'a',v=t[i]-'a';
+            if(d[u][v]==INF) return -1;
+            ans+=d[u][v];
+        }
+        return ans;
+    }
+};
