@@ -1,0 +1,35 @@
+class Solution{
+public:
+    long long minimumCost(vector<int>&nums,int k,int dist){
+        int n=nums.size();
+        long long window=0;
+        multiset<int> sel,cand;
+        for(int i=1;i<=dist+1&&i<n;i++){window+=nums[i];sel.insert(nums[i]);}
+        auto balance=[&](){
+            while((int)sel.size()<k-1){
+                int v=*cand.begin();
+                window+=v;
+                sel.insert(v);
+                cand.erase(cand.find(v));
+            }
+            while((int)sel.size()>k-1){
+                int v=*prev(sel.end());
+                window-=v;
+                sel.erase(prev(sel.end()));
+                cand.insert(v);
+            }
+        };
+        balance();
+        long long best=window;
+        for(int i=dist+2;i<n;i++){
+            int out=nums[i-dist-1];
+            auto it=sel.find(out);
+            if(it!=sel.end()){window-=out;sel.erase(it);} else cand.erase(cand.find(out));
+            if(!sel.empty()&&nums[i]<*prev(sel.end())){window+=nums[i];sel.insert(nums[i]);}
+            else cand.insert(nums[i]);
+            balance();
+            best=min(best,window);
+        }
+        return nums[0]+best;
+    }
+};
