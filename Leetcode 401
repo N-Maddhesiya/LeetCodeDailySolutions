@@ -1,0 +1,22 @@
+class Solution{
+public:
+    int bits(int x){
+        int c=0;
+        while(x){c+=x&1;x>>=1;}
+        return c;
+    }
+    vector<string> readBinaryWatch(int turnedOn){
+        vector<string> res;
+        for(int h=0;h<12;h++){
+            for(int m=0;m<60;m++){
+                if(bits(h)+bits(m)==turnedOn){
+                    string t=to_string(h)+":";
+                    if(m<10) t+="0";
+                    t+=to_string(m);
+                    res.push_back(t);
+                }
+            }
+        }
+        return res;
+    }
+};
