@@ -1,0 +1,17 @@
+class Solution{
+    public:
+    int numberOfStableArrays(int z,int o,int l){
+        const int m=1000000007;
+        vector<vector<vector<long>>> dp(z+1,vector<vector<long>>(o+1,vector<long>(2)));
+        for(int i=0;i<=min(z,l);++i)
+            dp[i][0][0]=1;
+        for(int j=0;j<=min(o,l);++j)
+            dp[0][j][1]=1;
+        for(int i=1;i<=z;++i)
+            for(int j=1;j<=o;++j){
+            dp[i][j][0]=(dp[i-1][j][0]+dp[i-1][j][1]-(i-l<1?0:dp[i-l-1][j][1])+m)%m;
+            dp[i][j][1]=(dp[i][j-1][0]+dp[i][j-1][1]-(j-l<1?0:dp[i][j-l-1][0])+m)%m;
+        }
+        return (int)((dp[z][o][0]+dp[z][o][1])%m);
+    }
+};
