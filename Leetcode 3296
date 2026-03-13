@@ -1,0 +1,18 @@
+class Solution{
+    public:
+    long long minNumberOfSeconds(int h,vector<int>& w){
+        long long l=1,r=1e18;
+        while(l<r){
+            long long m=(l+r)/2;
+            long long s=0;
+            for(long long x:w){
+                long long k=(sqrt(1+8.0*m/x)-1)/2;
+                s+=k;
+                if(s>=h)    break;
+            }
+            if(s>=h)r=m;
+            else l=m+1;
+        }
+        return l;
+    }
+};
