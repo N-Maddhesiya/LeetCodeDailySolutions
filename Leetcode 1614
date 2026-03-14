@@ -1,0 +1,24 @@
+class Solution{
+public:
+string getHappyString(int n,int k){
+    vector<string>a;
+    string s="";
+    function<void()>f=[&](){
+        if(s.size()==n){
+            a.push_back(s);
+            return;
+        }
+        for(char c='a';c<='c';c++){
+            if(s.empty()||s.back()!=c){
+                s.push_back(c);
+                f();
+                s.pop_back();
+            }
+        }
+    };
+    f();
+    if(k>a.size())
+        return "";
+    return a[k-1];
+    }
+};
