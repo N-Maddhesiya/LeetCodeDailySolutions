@@ -1,0 +1,64 @@
+class Solution {
+public:
+    long long totalSum=0;
+    bool checkHorCuts(vector<vector<int>>& grid) {
+        int m=grid.size(),n=grid[0].size();
+        unordered_set<long long>seen;
+        long long top=0;
+        for(int i=0;i<=m-2;i++){
+            for(int j=0;j<n;j++){
+                seen.insert(grid[i][j]);
+                top+=grid[i][j];
+            }
+            long long bottom=totalSum-top;
+            long long diff=top-bottom;
+
+            if(diff==0)
+                return true;
+            if(diff==grid[0][0])
+                return true;
+            if(diff==grid[0][n-1])
+                return true;
+            if(diff==grid[i][0])
+                return true;
+            if(diff==grid[i][n-1])
+                return true;
+            if (i>0&&n>1&&seen.count(diff))
+                return true;
+        }
+        return false;
+    }
+    void reverseRows(vector<vector<int>>& grid){
+        int m=grid.size();
+        for(int i=0;i<m/2;i++)
+            swap(grid[i],grid[m-1-i]);
+    }
+    bool canPartitionGrid(vector<vector<int>>&grid){
+        int m=grid.size(),n=grid[0].size();
+        totalSum=0;
+        for(int i=0;i<m;i++)
+            for(int j=0;j<n;j++)
+                totalSum+=grid[i][j];
+
+        if(checkHorCuts(grid))
+            return true;
+        reverseRows(grid);
+        if(checkHorCuts(grid))
+            return true;
+        reverseRows(grid);
+
+        vector<vector<int>>transpose(n,vector<int>(m));
+        
+        for(int i=0;i<m;i++)
+            for(int j=0;j<n;j++)
+                transpose[j][i]=grid[i][j];
+        
+        if(checkHorCuts(transpose)) 
+            return true;
+        reverseRows(transpose);
+        
+        if(checkHorCuts(transpose)) 
+            return true;
+        return false;
+    }
+};
