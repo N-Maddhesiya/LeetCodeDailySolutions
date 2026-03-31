@@ -1,0 +1,50 @@
+class Solution {
+public:
+    string generateString(string str1, string str2) {
+        int n=str1.size(),m=str2.size(),sz=n+m-1;
+        string ans(sz,'?');
+        vector<int> fixed(sz,0);
+        for(int i=0;i<n;i++){
+            if(str1[i]=='T'){
+                for(int j=0;j<m;j++){
+                    int p=i+j;
+                    if(ans[p]!='?'&&ans[p]!=str2[j])
+                        return "";
+                    ans[p]=str2[j];
+                    fixed[p]=1;
+                }
+            }
+        }
+        for(int i=0;i<sz;i++){
+            if(ans[i]=='?')
+                ans[i]='a';
+        }
+
+        for(int i=0;i<n;i++){
+            if(str1[i]=='F'){
+                bool ok=true;
+                for(int j=0;j<m;j++){
+                    if(ans[i+j]!=str2[j]){
+                        ok=false;
+                        break;
+                    }
+                }
+                if(ok){
+                    int pos=-1;
+                    for(int j=m-1;j>=0;j--){
+                        int p=i+j;
+                        if(!fixed[p]){
+                            pos=p;
+                            break;
+                        }
+                    }
+                    if(pos==-1)
+                        return "";
+                    ans[pos]='b';
+                }
+            }
+        }
+
+        return ans;
+    }
+};
