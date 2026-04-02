@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int maximumAmount(vector<vector<int>>& coins) {
+        int m=coins.size(),n=coins[0].size();
+        vector<vector<vector<int>>>dp(m,vector<vector<int>>(n,vector<int>(3,INT_MIN)));
+        auto dfs=[&](auto&& self,int i,int j,int k)->int{
+            if(i>=m||j>=n)
+                return -1000000000;
+            if(dp[i][j][k]!=INT_MIN)
+                return dp[i][j][k];
+            if(i==m-1&&j==n-1){
+                if(k>0)
+                    return dp[i][j][k]=max(0,coins[i][j]);
+                return dp[i][j][k]=coins[i][j];
+            }
+            int ans=coins[i][j]+max(self(self,i+1,j,k),self(self,i,j+1,k));
+            if(coins[i][j]<0&&k>0)
+                ans=max(ans,max(self(self,i+1,j,k-1),self(self,i,j+1,k-1)));
+            return dp[i][j][k]=ans;
+        };
+        return dfs(dfs,0,0,2);
+    }
+};
