@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int maxWalls(vector<int>& robots, vector<int>& distance, vector<int>& walls) {
+        int n=robots.size();
+        vector<pair<long long,long long>>a(n);
+        for(int i=0;i<n;i++) a[i]={robots[i],distance[i]};
+        sort(a.begin(),a.end());
+        vector<long long>p(n),d(n);
+        for(int i=0;i<n;i++){
+            p[i]=a[i].first;
+            d[i]=a[i].second;
+        }
+        vector<long long>w(walls.begin(),walls.end());
+        sort(w.begin(),w.end());
+        w.erase(unique(w.begin(),w.end()),w.end());
+        auto cnt=[&](long long l,long long r)->long long{
+            if(l>r) return 0;
+            return upper_bound(w.begin(),w.end(),r)-lower_bound(w.begin(),w.end(),l);
+        };
+        long long fixed=0;
+        for(int i=0;i<n;i++) if(binary_search(w.begin(),w.end(),p[i])) fixed++;
+        long long leftEnd=cnt(p[0]-d[0],p[0]-1);
+        long long rightEnd=cnt(p[n-1]+1,p[n-1]+d[n-1]);
+        vector<long long>L(n-1),R(n-1),O(n-1);
+        for(int i=0;i<n-1;i++){
+            long long l1=p[i]+1,r1=min(p[i]+d[i],p[i+1]-1);
+            long long l2=max(p[i]+1,p[i+1]-d[i+1]),r2=p[i+1]-1;
+            L[i]=cnt(l1,r1);
+            R[i]=cnt(l2,r2);
+            O[i]=cnt(max(l1,l2),min(r1,r2));
+        }
+        const long long NEG=-4e18;
+        long long dp0=leftEnd,dp1=0;
+        for(int i=1;i<n;i++){
+            long long ndp0=NEG,ndp1=NEG;
+            for(int pc=0;pc<2;pc++){
+                long long cur=pc?dp1:dp0;
+                if(cur==NEG) continue;
+                for(int c=0;c<2;c++){
+                    long long g=0;
+                    if(pc==1) g+=L[i-1];
+                    if(c==0) g+=R[i-1];
+                    if(pc==1&&c==0) g-=O[i-1];
+                    if(c==0) ndp0=max(ndp0,cur+g);
+                    else ndp1=max(ndp1,cur+g);
+                }
+            }
+            dp0=ndp0;
+            dp1=ndp1;
+        }
+        return (int)(max(dp0,dp1+rightEnd)+fixed);
+    }
+};
