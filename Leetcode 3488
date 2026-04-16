@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> solveQueries(vector<int>& nums, vector<int>& queries) {
+        int n=nums.size();
+        vector<int>dist(n,n),ans;
+        unordered_map<int,int>last;
+        for(int i=0;i<2*n;i++){
+            int idx=i%n,x=nums[idx];
+            if(last.count(x)){
+                int p=last[x]%n,d=i-last[x];
+                dist[idx]=min(dist[idx],d);
+                dist[p]=min(dist[p],d);
+            }
+            last[x]=i;
+        }
+        for(int q:queries)
+            ans.push_back(dist[q]==n?-1:dist[q]);
+        return ans;
+    }
+};
