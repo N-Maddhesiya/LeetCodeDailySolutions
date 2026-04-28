@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int minOperations(vector<vector<int>>& grid, int x) {
+        vector<int>arr;
+        for(auto &row : grid)
+            for(auto &v : row)
+                arr.push_back(v);
+        int rem = arr[0] % x;
+        for(auto v : arr) {
+            if(v % x != rem)
+                return -1;
+        }
+        sort(arr.begin(), arr.end());
+        int n = arr.size();
+        int target = arr[n / 2];
+        int ops = 0;
+        for(auto v : arr)
+            ops += abs(v - target) / x;
+        return ops;
+    }
+};
