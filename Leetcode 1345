@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int minJumps(vector<int>& arr) {
+        int n = arr.size();
+        if(n == 1)
+            return 0;
+        unordered_map<int, vector<int>> mp;
+        for(int i = 0; i < n; i++) {
+            mp[arr[i]].push_back(i);
+        }
+        queue<pair<int,int>> q;
+        vector<bool> vis(n, false);
+        q.push({0, 0});
+        vis[0] = true;
+        while(!q.empty()) {
+            auto [i, steps] = q.front();
+            q.pop();
+            if(i == n - 1)
+                return steps;
+            vector<int> next = mp[arr[i]];
+            next.push_back(i - 1);
+            next.push_back(i + 1);
+            for(auto x : next) {
+                if(x >= 0 && x < n && !vis[x]) {
+                    vis[x] = true;
+                    q.push({x, steps + 1});
+                }
+            }
+            mp[arr[i]].clear();
+        }
+        return -1;
+    }
+};
