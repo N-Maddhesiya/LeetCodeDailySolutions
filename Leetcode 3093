@@ -1,0 +1,55 @@
+class Solution {
+public:
+    struct Node {
+        int child[26];
+        int idx;
+        int len;
+        Node() {
+            fill(child, child + 26, -1);
+            idx = -1;
+            len = INT_MAX;
+        }
+    };
+    vector<Node> trie;
+    void upd(int node, int length, int index) {
+        if (length < trie[node].len ||
+            (length == trie[node].len && index < trie[node].idx)) {
+            trie[node].len = length;
+            trie[node].idx = index;
+        }
+    }
+    vector<int> stringIndices(vector<string>& wordsContainer, vector<string>& wordsQuery) {
+        int total = 1;
+        for (auto &w : wordsContainer) total += (int)w.size();
+        trie.reserve(total);
+        trie.push_back(Node());
+        for (int i = 0; i < (int)wordsContainer.size(); i++) {
+            string s = wordsContainer[i];
+            reverse(s.begin(), s.end());
+            int node = 0;
+            upd(node, (int)s.size(), i);
+            for (char c : s) {
+                int id = c - 'a';
+                if (trie[node].child[id] == -1) {
+                    trie[node].child[id] = (int)trie.size();
+                    trie.push_back(Node());
+                }
+                node = trie[node].child[id];
+                upd(node, (int)s.size(), i);
+            }
+        }
+        vector<int> ans;
+        ans.reserve(wordsQuery.size());
+        for (string q : wordsQuery) {
+            reverse(q.begin(), q.end());
+            int node = 0;
+            for (char c : q) {
+                int id = c - 'a';
+                if (trie[node].child[id] == -1) break;
+                node = trie[node].child[id];
+            }
+            ans.push_back(trie[node].idx);
+        }
+        return ans;
+    }
+};
