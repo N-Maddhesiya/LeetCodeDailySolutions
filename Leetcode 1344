@@ -1,0 +1,17 @@
+class Solution {
+public:
+    double angleClock(int hour, int minutes) {
+        double x=0;
+        if(hour>=1&&hour<=11){
+            x=hour*30;
+            x+=minutes*(0.5);
+        }
+        else
+            x=minutes*(0.5);
+        double y=minutes*6;
+        if(abs(x-y)<=180)   return abs(x-y);
+        double a=max(x,y);
+        double b=min(x,y);
+        return (360-a)+b;
+    }
+};
