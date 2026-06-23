@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int zigZagArrays(int n, int l, int r) {
+        static const int MOD = 1000000007;
+        int m = r - l + 1;
+
+        if (n == 1) return m;
+
+        vector<int> up(m + 2, 0), down(m + 2, 0);
+        vector<int> newUp(m + 2, 0), newDown(m + 2, 0);
+        vector<int> pref(m + 3, 0);
+
+        for (int x = 1; x <= m; x++) {
+            up[x] = x - 1;
+            down[x] = m - x;
+        }
+
+        if (n == 2) {
+            return (long long)m * (m - 1) % MOD;
+        }
+
+        for (int len = 3; len <= n; len++) {
+            pref[0] = 0;
+            for (int x = 1; x <= m; x++) {
+                pref[x] = pref[x - 1] + down[x];
+                if (pref[x] >= MOD) pref[x] -= MOD;
+            }
+
+            for (int x = 1; x <= m; x++) {
+                newUp[x] = pref[x - 1];
+            }
+
+            pref[m + 1] = 0;
+            for (int x = m; x >= 1; x--) {
+                pref[x] = pref[x + 1] + up[x];
+                if (pref[x] >= MOD) pref[x] -= MOD;
+            }
+
+            for (int x = 1; x <= m; x++) {
+                newDown[x] = pref[x + 1];
+            }
+
+            up.swap(newUp);
+            down.swap(newDown);
+        }
+
+        long long ans = 0;
+        for (int x = 1; x <= m; x++) {
+            ans += up[x];
+            ans += down[x];
+            if (ans >= MOD) ans %= MOD;
+        }
+
+        return (int)(ans % MOD);
+    }
+};
