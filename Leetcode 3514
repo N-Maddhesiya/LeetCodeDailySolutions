@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int uniqueXorTriplets(vector<int>& nums) {
+        static const int M = 2048; 
+        vector<bool> seen(M, false);
+        vector<int> vals;
+        for (int x : nums) {
+            if (!seen[x]) {
+                seen[x] = true;
+                vals.push_back(x);
+            }
+        }
+        vector<bool> pairXor(M, false);
+        vector<bool> tripXor(M, false);
+        for (int a : vals) {
+            for (int b : vals) {
+                pairXor[a ^ b] = true;
+            }
+        }
+        for (int p = 0; p < M; ++p) {
+            if (!pairXor[p]) continue;
+            for (int c : vals) {
+                tripXor[p ^ c] = true;
+            }
+        }
+        int ans = 0;
+        for (bool ok : tripXor) {
+            if (ok) ans++;
+        }
+        return ans;
+    }
+};
