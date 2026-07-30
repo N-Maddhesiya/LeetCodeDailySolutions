@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int minimumPushes(string word) {
+        int n=word.size();
+        int ans=0,a=0;
+        while(n>8){
+            a++;
+            ans+=8*a;
+            n-=8;
+        }
+        a++;
+        ans+=(n*a);
+        return ans;
+    }
+};
+/*
+class Solution {
+public:
+    int minimumPushes(string word) {
+        vector<vector<int>>mat={
+            {'1'},
+            {'2','a','b'},
+            {'3','d','e','f'},
+            {'4','g','h','i'},
+            {'5',}
+        }
+        int n=word.size(),ans=0;
+        for(int i=0;i<n;i++){
+            int a=find(mat,word[i]);
+            ans+=a;
+        }
+        return ans;
+    }
+    int find(vector<vector<int>>& mat, int target) {
+        int rows = mat.size();
+        int cols = mat[0].size();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(mat[i][j] == target)
+                    return j;
+            }
+        }
+    }
+};
+*/
