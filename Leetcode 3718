@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int missingMultiple(vector<int>& nums, int k) {
+        int m=k,n=nums.size();
+        sort(nums.begin(),nums.end());
+        for(int i:nums){
+            if(i%k==0){
+                if(i==m)
+                    m+=k;
+            }
+        }
+        return m;
+    }
+};
