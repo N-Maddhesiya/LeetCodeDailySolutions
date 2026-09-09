@@ -1,0 +1,13 @@
+class Solution {
+public:
+    long long countCommas(long long n) {
+        __int128 ans =0;
+        __int128 p=1000;
+        
+        while(p<=n){
+            ans+=(__int128)n-p+1;
+            p*=1000;
+        }
+        return (long long)ans;
+    }  
+};
