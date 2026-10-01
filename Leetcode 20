@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        vector<char>ans;
+        int n=s.size(),i=0,j=-1;
+        while(i<n){
+            if(s[i]=='('||s[i]=='{'||s[i]=='[') {
+                ans.push_back(s[i]);
+                j++;
+            }
+            else if(ans.empty())    return false;
+            else if(s[i]==')'){
+                if(ans[j]!='(') return false;
+                ans.pop_back();
+                j--;
+            }
+            else if(s[i]==']'){
+                if(ans[j]!='[') return false;
+                ans.pop_back();
+                j--;
+            }
+            else if(s[i]=='}'){
+                if(ans[j]!='{') return false;
+                ans.pop_back();
+                j--;
+            }
+            i++;
+        }
+        // return true;
+        return ans.empty();
+    }
+};
