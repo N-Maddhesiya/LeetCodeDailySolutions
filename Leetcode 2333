@@ -1,0 +1,39 @@
+class Solution {
+public:
+    long long minSumSquareDiff(vector<int>& nums1, vector<int>& nums2, int k1, int k2) {
+        vector<int> diff;
+        long long k = 1LL * k1 + k2, total = 0;
+        int mx = 0;
+        for(int i = 0; i < nums1.size(); i++) {
+            int d = abs(nums1[i] - nums2[i]);
+            diff.push_back(d);
+            total += d;
+            mx = max(mx, d);
+        }
+        if(k >= total)
+            return 0;
+        auto need = [&](int x) {
+            long long cnt = 0;
+            for(int d : diff)
+                cnt += max(0, d - x);
+            return cnt;
+        };
+        int l = 0, r = mx;
+        while(l < r) {
+            int mid = l + (r - l) / 2;
+            if(need(mid) <= k)
+                r = mid;
+            else
+                l = mid + 1;
+        }
+        int x = l;
+        long long rem = k - need(x);
+        long long ans = 0;
+        for(int d : diff) {
+            int v = min(d, x);
+            ans += 1LL * v * v;
+        }
+        ans -= rem * (2LL * x - 1);
+        return ans;
+    }
+};
