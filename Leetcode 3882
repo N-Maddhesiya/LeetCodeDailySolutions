@@ -1,0 +1,36 @@
+class Solution{
+public:
+    int minCost(vector<vector<int>>& grid) {
+        int m=grid.size(),n=grid[0].size();
+        const int M=1024;
+        vector<array<char,M>>dp(n);
+        for(int j=0;j<n;j++)
+            dp[j].fill(0);
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                array<char,M>cur{};
+                if(i==0&&j==0){
+                    cur[grid[0][0]]=1;
+                }
+                else{
+                    int v=grid[i][j];
+                    if(i>0){
+                        for(int x=0;x<M;x++)
+                            if(dp[j][x])
+                                cur[x^v]=1;
+                    }
+                    if(j>0){
+                        for(int x=0;x<M;x++)
+                            if(dp[j-1][x])
+                                cur[x^v]=1;
+                    }
+                }
+                dp[j]=cur;
+            }
+        }
+        for(int x=0;x<M;x++)
+            if(dp[n-1][x])
+                return x;
+        return -1;
+    }
+};
